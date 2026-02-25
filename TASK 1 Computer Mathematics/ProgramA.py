@@ -1,3 +1,20 @@
+
+def Convert(): # Convert (decimal → hex and binary)
+    pass
+
+def Littleendian(): # Little-endian pack/unpack (16-bit) + memory write/read
+    pass
+
+def ASCII(): # ASCII memory dump + null terminator + length scan
+    pass
+
+def ArrayAdressing(): # Array addressing + dereference (read/write one element)
+    pass
+
+def StackFrame(): # Stack frame (simplified bp offsets) + register-style view
+    pass
+
+
 def main():
     running = True
     while running:
@@ -16,24 +33,24 @@ def main():
 
             if op == '1':
             # 1 -  Convert (decimal → hex and binary)
-                pass
+                Convert()
          
 
             elif op == '2':
             # 2 - Little-endian pack/unpack (16-bit) + memory write/read
-                pass
+                Littleendian()
         
             elif op == '3':
             # 3 - ASCII memory dump + null terminator + length scan
-                pass
+                ASCII()
 
             elif op == '4':
             # 4 - Array addressing + dereference (read/write one element)
-                pass
+                ArrayAdressing()
 
             elif op == '5':
             # 5 - Stack frame (simplified bp offsets) + register-style view
-                pass
+                StackFrame()
             
             elif op == '6':
                 running = False
