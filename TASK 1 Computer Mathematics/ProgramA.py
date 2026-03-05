@@ -38,7 +38,7 @@ def signed16(n: int) -> int:
     return n if n < U16_SIGN_BIT else n - (U16_MAX + 1)
     
 def Convert(): # Convert (decimal → hex and binary)
-    """Output line for Option 1
+    """Output for Option 1
     """
     n = require_u16(n)
     print(f"HEX = {hex_u16(n)}\nBIN(16) = {bin16(n)}\nSIGNED16 = {signed16(n)}")
@@ -103,4 +103,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
