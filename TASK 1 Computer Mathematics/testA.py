@@ -3,7 +3,7 @@ import ProgramA
 
 class TestOption1(unittest.TestCase):
 
-    def test_hexu16(self):
+    def test_hex_u16(self):
         self.assertEqual(ProgramA.hex_u16(10), "000A")
         self.assertEqual(ProgramA.hex_u16(65535), "FFFF")
 
@@ -18,6 +18,12 @@ class TestOption1(unittest.TestCase):
     def test_signed16_negative_range(self):
         self.assertEqual(ProgramA.signed16(32768), -32768)
         self.assertEqual(ProgramA.signed16(65535), -1)
+
+    def test_option1_lines_format(self):
+        lines = ProgramA.option1_lines(65535)
+        self.assertEqual(lines[0], "HEX = FFFF")
+        self.assertEqual(lines[1], "BIN(16) = 1111111111111111")
+        self.assertEqual(lines[2], "SIGNED16 = -1")
 
     def test_require_u16_rejects_out_of_range(self):
         with self.assertRaises(ValueError):
