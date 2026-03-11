@@ -1,6 +1,6 @@
 U16_MAX = 0xFFFF
 U16_SIGN_BIT = 0x8000
-
+memory = {}
 def require_u16(n: int) -> int:
     """Validate n is a 16-bit unsigned integer (0..65535)."""
     if not isinstance(n, int):
@@ -107,8 +107,34 @@ def Littleendian(n, addr): # Little-endian pack/unpack (16-bit) + memory write/r
 def ASCII(): # ASCII memory dump + null terminator + length scan
     pass
 
+
+def get_address(base, index, size):
+    """Computes the exact memory address for an array element."""
+    return base + (index * size)
+
+def write_mem(address, size, value):
+    """Writes 1 or 2 bytes into the simulated memory dictionary."""
+    if size == 1:
+        # stores just the lowest 8 bits
+        memory[address] = value & 0xFF
+    elif size == 2:
+        # Little endian: low byte at address, high byte at address + 1
+        memory[address] = value & 0xFF
+        memory[address + 1] = (value >> 8) & 0xFF
+
+def read_mem(address, size):
+    """Reads bytes from memory and reconstructs the integer."""
+    if size == 1:
+        return memory.get(address, 0)
+    elif size == 2:
+        # rebuilds from little endian
+        low_byte = memory.get(address, 0)
+        high_byte = memory.get(address + 1, 0)
+        return (high_byte << 8) | low_byte
+    
 def ArrayAdressing(): # Array addressing + dereference (read/write one element)
     pass
+
 
 def StackFrame(): # Stack frame (simplified bp offsets) + register-style view
     # asking the user for two numbers
@@ -178,7 +204,45 @@ def main():
 
             elif op == '4':
             # 4 - Array addressing + dereference (read/write one element)
-                ArrayAdressing()
+                try:
+                    base_input = input("Enter base address (e.g., 1000 or 0x3004): ").strip()
+                 # It will heck if the user typed a hex string or decimal
+                    if base_input.lower().startswith("0x"):
+                        base = int(base_input, 16)
+                    else:
+                        base = int(base_input)
+                    
+                    index = int(input("Enter index: "))
+                    size = int(input("Enter element size (1 or 2): "))
+                
+                    if size not in [1, 2]:
+                        print("Error: Size must be 1 or 2.")
+                        continue
+                    
+                    mode = input("Enter mode (read or write): ").strip().lower()
+                    if mode not in ["read", "write"]:
+                        print("Error: Invalid mode. Must be 'read' or 'write'.")
+                        continue
+                    
+                    # Calculates the target address
+                    address = get_address(base, index, size)
+                
+                    # then prints the required output formats
+                    print("\nADDRESS = base + index*size")
+                    print(f"ADDRESS = {hex(address)}")
+                
+                    if mode == "write":
+                        value = int(input("Enter value to write: "))
+                        write_mem(address, size, value)
+                        print(f"WRITE size={size} value={value} to ADDRESS {hex(address)}")
+                    
+                    elif mode == "read":
+                        val = read_mem(address, size)
+                        print(f"READ size={size} from ADDRESS {hex(address)} = {val}")
+                    
+                except ValueError:
+                    #  if user types text instead of numbers
+                    print("Error: Invalid number format entered. Returning to menu.")
 
             elif op == '5':
             # 5 - Stack frame (simplified bp offsets) + register-style view
