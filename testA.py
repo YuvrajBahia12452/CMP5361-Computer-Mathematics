@@ -65,5 +65,30 @@ class TestOption2(unittest.TestCase):
     def test_65535(self):
         self.check_output(65535, 0x2000, 255, 255, 65535)
 
+class TestOption4(unittest.TestCase):
+
+    def test_array_address_calculation(self):
+        # The brief asked that the testing base=1000, index=3, size=2 -> 1006
+        address = ProgramA.get_address(1000, 3, 2)
+        self.assertEqual(address, 1006)
+
+    def test_memory_write_and_read_1_byte(self):
+        # Test is storing a simple value in 1 byte
+        test_addr = 0x1000
+        ProgramA.write_mem(test_addr, 1, 200)
+        
+        # it will read it back and check if it matches
+        result = ProgramA.read_mem(test_addr, 1)
+        self.assertEqual(result, 200)
+
+    def test_memory_write_and_read_2_bytes_little_endian(self):
+        # Test iswriting a 2 byte value (like 1000) to memory and reading back
+        test_addr = 0x3004
+        ProgramA.write_mem(test_addr, 2, 1000)
+        
+        # Read it back to ensure the little endian rebuilding works
+        result = ProgramA.read_mem(test_addr, 2)
+        self.assertEqual(result, 1000)
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
