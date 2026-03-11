@@ -17,6 +17,8 @@ When the menu appears, choose:
 * `1` to run Option 1: Convert (decimal → hex and 16-bit binary + SIGNED16)
 * `2` to run Option 2: Little-endian pack/unpack (16-bit)
 * `3` to run Option 3: ASCII memory dump
+* `4`to run Option 4: array addressing
+* `5`to run Option 5: Stack frame (bp offsets)
 * `0` to exit
 
 ## How to run the tests (unittest)
