@@ -15,6 +15,8 @@ This runs ProgramA.py
 When the menu appears, choose:
 
 * `1` to run Option 1: Convert (decimal → hex and 16-bit binary + SIGNED16)
+* `2` to run Option 2: Little-endian pack/unpack (16-bit)
+* `3` to run Option 3: ASCII memory dump
 * `0` to exit
 
 ## How to run the tests (unittest)
