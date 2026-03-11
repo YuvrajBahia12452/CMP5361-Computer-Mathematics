@@ -65,6 +65,99 @@ class TestOption2(unittest.TestCase):
     def test_65535(self):
         self.check_output(65535, 0x2000, 255, 255, 65535)
 
+
+class TestOption3(unittest.TestCase):
+
+    def test_normal_string_hello(self):
+        result = ProgramA.ascii_dump_lines("HELLO")
+        expected = [
+            "0x1000 : 0x48",
+            "0x1001 : 0x45",
+            "0x1002 : 0x4C",
+            "0x1003 : 0x4C",
+            "0x1004 : 0x4F",
+            "0x1005 : 0x00",
+            "LENGTH (until 0x00) = 5"
+        ]
+        self.assertEqual(result, expected)
+
+    def test_single_character(self):
+        result = ProgramA.ascii_dump_lines("A")
+        expected = [
+            "0x1000 : 0x41",
+            "0x1001 : 0x00",
+            "LENGTH (until 0x00) = 1"
+        ]
+        self.assertEqual(result, expected)
+
+    def test_empty_string(self):
+        result = ProgramA.ascii_dump_lines("")
+        expected = [
+            "0x1000 : 0x00",
+            "LENGTH (until 0x00) = 0"
+        ]
+        self.assertEqual(result, expected)
+
+    def test_maximum_length_10_characters(self):
+        result = ProgramA.ascii_dump_lines("ABCDEFGHIJ")
+        expected = [
+            "0x1000 : 0x41",
+            "0x1001 : 0x42",
+            "0x1002 : 0x43",
+            "0x1003 : 0x44",
+            "0x1004 : 0x45",
+            "0x1005 : 0x46",
+            "0x1006 : 0x47",
+            "0x1007 : 0x48",
+            "0x1008 : 0x49",
+            "0x1009 : 0x4A",
+            "0x100A : 0x00",
+            "LENGTH (until 0x00) = 10"
+        ]
+        self.assertEqual(result, expected)
+
+    def test_more_than_10_characters_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            ProgramA.ascii_dump_lines("ABCDEFGHIJK")
+
+    def test_addresses_increase_by_one(self):
+        result = ProgramA.ascii_dump_lines("ABC")
+        self.assertEqual(result[0], "0x1000 : 0x41")
+        self.assertEqual(result[1], "0x1001 : 0x42")
+        self.assertEqual(result[2], "0x1002 : 0x43")
+        self.assertEqual(result[3], "0x1003 : 0x00")
+
+    def test_null_terminator_added_after_last_character(self):
+        result = ProgramA.ascii_dump_lines("CAT")
+        self.assertEqual(result[3], "0x1003 : 0x00")
+
+    def test_length_output_for_three_character_string(self):
+        result = ProgramA.ascii_dump_lines("DOG")
+        self.assertEqual(result[-1], "LENGTH (until 0x00) = 3")
+
+    def test_digits_string(self):
+        result = ProgramA.ascii_dump_lines("123")
+        expected = [
+            "0x1000 : 0x31",
+            "0x1001 : 0x32",
+            "0x1002 : 0x33",
+            "0x1003 : 0x00",
+            "LENGTH (until 0x00) = 3"
+        ]
+        self.assertEqual(result, expected)
+
+    def test_string_with_space(self):
+        result = ProgramA.ascii_dump_lines("A B")
+        expected = [
+            "0x1000 : 0x41",
+            "0x1001 : 0x20",
+            "0x1002 : 0x42",
+            "0x1003 : 0x00",
+            "LENGTH (until 0x00) = 3"
+        ]
+        self.assertEqual(result, expected)
+
+
 class TestOption4(unittest.TestCase):
 
     def test_array_address_calculation(self):
