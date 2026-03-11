@@ -101,11 +101,30 @@ def Littleendian(n, addr): # Little-endian pack/unpack (16-bit) + memory write/r
     ] + print_message + print_MEMO
 
 
+def ascii_dump_lines(s: str, base: int = 0x1000) -> list[str]:
+    if len(s) > 10:
+        raise ValueError("String must be at most 10 characters")
 
+    lines = []
 
+    for i, ch in enumerate(s):
+        addr = base + i
+        byte = ord(ch)
+        lines.append(f"0x{addr:04X} : 0x{byte:02X}")
+
+    null_addr = base + len(s)
+    lines.append(f"0x{null_addr:04X} : 0x00")
+    lines.append(f"LENGTH (until 0x00) = {len(s)}")
+
+    return lines
 
 def ASCII(): # ASCII memory dump + null terminator + length scan
-    pass
+    try:
+        s = input("Enter a string (max 10 characters): ")
+        for line in ascii_dump_lines(s):
+            print(line)
+    except ValueError as e:
+        print(e)
 
 
 def get_address(base, index, size):
@@ -132,9 +151,6 @@ def read_mem(address, size):
         high_byte = memory.get(address + 1, 0)
         return (high_byte << 8) | low_byte
     
-def ArrayAdressing(): # Array addressing + dereference (read/write one element)
-    pass
-
 
 def StackFrame(): # Stack frame (simplified bp offsets) + register-style view
     # asking the user for two numbers
