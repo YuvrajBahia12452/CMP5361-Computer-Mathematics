@@ -4,7 +4,7 @@
 ## Python version
 Python 3.11+
 
-## How to run the programme
+## How to run the program
 From the folder containing `programA.py`:
 
 ```bash
