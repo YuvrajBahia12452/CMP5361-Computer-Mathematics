@@ -29,7 +29,7 @@ From the same folder:
 python -m unittest -v
 ```
 
-This runs `testA.py`, which imports and tests the Option 1 functions from `programA.py`.
+This runs `testA.py`, which imports and tests the functions from `programA.py`.
 
 ```
 ```
